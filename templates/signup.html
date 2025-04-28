@@ -1,0 +1,45 @@
+{% extends 'main.html' %}
+<title>{%block title%}Ekart-Signup{%endblock%}</title>
+{% block content %}
+<div>
+    <form action="/newuser" method="POST">
+        {% csrf_token %}
+        <table align="center" class="logTable">
+            <tr>
+                <td><label for="name">First Name</label></td>
+                <td style="text-align: center;"><input type="text" name="fname" placeholder="Enter your first name">
+                </td>
+            </tr>
+            <tr>
+                <td><label for="name">Last Name</label></td>
+                <td style="text-align: center;"><input type="text" name="lname" placeholder="Enter your last name"></td>
+            </tr>
+            <tr>
+                <td><label for="name">Email</label></td>
+                <td style="text-align: center;"><input type="email" name="email" placeholder="Enter your email"></td>
+            </tr>
+            <!-- <tr>
+                    <td><label for="name">Phone</label></td>
+                    <td><input type="number" name="phone" placeholder="Enter your phone"></td>
+                </tr> -->
+            <tr>
+                <td><label for="name">Password</label></td>
+                <td style="text-align: center;"><input type="password" name="password"
+                        placeholder="Enter your password"></td>
+            </tr>
+            <tr>
+                <td><label for="name">Re-Enter Password</label></td>
+                <td style="text-align: center;"><input type="password" name="chk_password"
+                        placeholder="Re-enter your password"></td>
+            </tr>
+            <tr>
+                <!-- <td style="text-align: center;"><button style="background-color: coral;" formaction="/login">Login</button></td> -->
+                <td align="center">
+                    <a href="/login">Want to login instead ?</a>
+                </td>
+                <td style="text-align: center;"><button type="submit">Signup</button></td>
+            </tr>
+        </table>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'main.html'%}
+{% block title %}
+{% if var == '1' %}
+About Us
+{% else %}
+Contact Us
+{% endif %}
+{% endblock %}
+{% block content %}
+{% if var == '1' %}
+<div class="abt_cont">
+    <h1>About Us</h1>
+    <p>Our aim is to make the lives of other people easier. <br>
+        We take pride in helping people get what the require. <br>
+        Every small step counts, and this site is our small step in our growth. <br>
+        Hope we made your life easier.
+    </p>
+    <div>
+        <h1 align="center">Website Made by :</h1>
+        <table align="center" style="text-align: justify; font-size: 17px;">
+            <tr>
+                <td>Soumyadip Choudhury</td>
+            </tr>
+        </table>
+    </div>
+</div>
+{% else %}
+<div class="abt_cont">
+    <h1>Contact Us</h1>
+    <table align="center" style="text-align: justify;">
+        <tr>
+            <td><strong>Phone : </strong></td>
+            <td>+91-9876543210</td>
+        </tr>
+        <tr>
+            <td><strong>Email : </strong></td>
+            <td>contact@ekart.com</td>
+        </tr>
+        <tr>
+            <td><strong>Address : </strong></td>
+            <td>1, Site Street, District - 700000, West Bengal, India</td>
+        </tr>
+    </table>
+</div>
+{% endif %}
+{% endblock %}

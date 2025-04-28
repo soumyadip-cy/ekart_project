@@ -1,0 +1,93 @@
+{% extends 'main.html' %}
+<title>{%block title%}Home{%endblock%}</title>
+{% block content %}
+<script>
+    function hid(catyp) {
+        var x = document.getElementById(catyp)
+        var y = document.getElementById(catyp + "2")
+        if (x.style.display === "none") {
+            x.style.display = "block";
+            y.value = "-";
+        }
+        else {
+            x.style.display = "none";
+            y.value = "+";
+        }
+    }
+</script>
+{% if messages %}
+<div class="msg" name="Close">
+    {% for message in messages %}
+    {{ message }}
+    <button class="close" type="button" onclick="msgs()" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- <div class="heading2"><h1 style="font-size: 40px;">Featured Products</h1></div> -->
+<div class="main-home-div" style="background-color: whitesmoke;">
+    <div class="carousel" style="background-color: rgba(0, 0, 0, 0);" data-flickity='{ "autoPlay": true }'>
+        {% for high in highlights %}
+        <div align="center" class="carousel-cell" style="margin-left: 5%; margin-right: 5%;" id="{{high.product_fk.name}}" style="overflow: hidden;">
+            <a href="/productpg?dat={{high.product_fk.id}}" style="color: black;">
+                <table style="overflow: hidden;">
+                    <tr style="text-align: center; margin: auto; float: left; padding: 10px; width: 90%;">
+                        {% for imgs in imgs %}
+                        {% if imgs.product_fk.id == high.product_fk.id and imgs.main_img == imgs.yes %}
+                        <td style="width: 35%;"><img src={{media_url}}{{imgs.product_image}}
+                                style="width: fit-content; height: 280px;" alt="{{high.product_fk.name}}'s image">
+                        </td>
+                        {% endif %}
+                        {% endfor %}
+                        <td style=" font-size: 20px; width: 15%;">
+                            <h2>{{high.product_fk.name}}</h2>
+                        </td>
+                        <td style="width: 35%; font-size: 30px;">
+                            <h5>{{high.product_fk.desc}}</h5>
+                        </td>
+                        <td class="buynow" style="width: 15%;">
+                            <input type="hidden" id="buyx" value="{{high.product_fk.price}}" readonly>
+                            <h1 id="buyn">BUY NOW</h1>
+                        </td>
+                    </tr>
+                </table>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div align="center" style="margin: auto; margin-top: 5vh;">
+        <div align="left" class="heading2">
+            <!-- <h1 style="font-size: 40px;">All Categories</h1> -->
+        </div>
+        {% for cat in allcat %}
+        {% if forloop.counter|divisibleby:"5" %}
+        <br>
+        <a href="/catpg?var={{cat.id}}">
+            <div class="cards">
+                <div class="homeimg">
+                    <img class="homeimg" src="{{media_url}}{{cat.cat_pic}}" alt="{{cat.cat_name}}'s image'">
+                </div>
+                <div class="title">
+                    <h4>{{cat.cat_name}}</h4>
+                </div>
+            </div>
+        </a>
+        {% else %}
+        <a href="/catpg?var={{cat.id}}">
+            <div class="cards">
+                <div class="homeimg">
+                    <img class="homeimg" src="{{media_url}}{{cat.cat_pic}}" alt="{{cat.cat_name}}'s image'">
+                </div>
+                <div class="title">
+                    <h4>{{cat.cat_name}}</h4>
+                </div>
+            </div>
+        </a>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

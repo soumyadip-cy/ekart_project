@@ -1,0 +1,48 @@
+{% extends 'main.html' %}
+<title>{%block title%}Ekart-Login{%endblock%}</title>
+{%block content%}
+<div>
+    <form action="/loguser" method="POST">
+        {% csrf_token %}
+        <!-- {% if messages %}
+        <div class="msg" name="Close">
+            {% for message in messages %}
+            {{ message }}
+            <button align="right" type="button" onclick="msgs()" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {% endfor %}
+        </div>
+        {% endif %} -->
+        <table align="center" class="logTable">
+            <tr>
+                <td><label for="name">Email</label></td>
+                <td><input type="text" name="email" placeholder="Enter your email"></td>
+            </tr>
+            <tr>
+                <td><label for="name">Password</label></td>
+                <td><input type="password" name="password" placeholder="Enter your password"></td>
+            </tr>
+            {% if messages %}
+            <tr name="Close">
+                <td>
+                {% for message in messages %}
+                {{message}} 
+                {% endfor %}
+                </td>
+                <td>
+                <button class="close" type="button" onclick="msgs()" aria-label="Close">
+                    <span aria-hidden="false">&times;</span>
+                </button>
+                </td>
+            </tr>
+            {% endif %}
+            <tr>
+                <td><a href="/signup">Don't have an account ?</a></td>
+                <!-- <td style="text-align: center;"><button style="background-color: coral;" formaction="/signup">Signup</button></td> -->
+                <td style="text-align: center;"><button type="submit">Login</button></td>
+            </tr>
+        </table>
+    </form>
+</div>
+{%endblock%}

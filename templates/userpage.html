@@ -1,0 +1,234 @@
+{% extends 'main.html' %}
+{% block title %}
+{% if user.first_name is none%}{{ user.username }}{% else %}{{ user.first_name }}{% endif %}'s page
+{% endblock %}
+
+{% block content %}
+<script>
+    function clsTable(nm) {
+        var clsid = Number(nm)
+        for (var loop = 0; loop <= 3; loop++) {
+            var clsxtra = document.getElementsByName("userpgTable")[loop]
+            var ordT = document.getElementById("OrderTitle")
+            if (loop == clsid) {
+                // var cls = document.getElementsByName("userpgTable")[clsid];
+                // if (clsxtra.style.display === "none")
+                clsxtra.style.display = "block"
+                // else
+                //     clsxtra.style.display = "none"
+            }
+            else
+                clsxtra.style.display = "none"
+        }
+    }
+</script>
+<div
+    style="width: 1200px; margin: auto; border-style: hidden; border-width: 5px; border-color: blue; border-radius: 5px; border-top-width: 0px; border-bottom-width: 0px;">
+    <h1 style="font-family: sans-serif; font-size: 50px;">Welcome, {% if user.username == user.email %}{{
+        user.first_name }}{% else %}{{ user.username }}{% endif %}</h1>
+    <table>
+        <tr>
+            <td><button class="usr-btn" name="orderTable" onclick="clsTable(0)">Orders</button></td>
+            <td><button class="usr-btn" name="addrTable" onclick="clsTable(1)">Addresses</button></td>
+            <td><button class="usr-btn" name="chngUser" onclick="clsTable(2)">Change Details</button></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                <span id="orderTable" name="userpgTable">
+                    <table>
+                        <table id="OrderTitle" style="display: block;">
+                            <tr>
+                                <td>
+                                    <h1 class="userpgH1">Your Orders From Latest Order</h1>
+                                </td>
+                            </tr>
+                        </table>
+                        {% for ord in ords %}
+                        <a href="/productpg?dat={{ord.product_fk.id}}" style="color: black; font-size: 17px;">
+                            <table class="orderTable" style="width: 100%;">
+                                <tr>
+                                    <td>
+                                        {% for imgs in imgs %}
+                                        {% if imgs.product_fk.id == ord.product_fk.id and imgs.main_img == imgs.yes %}
+                                        <img class="imguser" src={{media_url}}{{imgs.product_image}}
+                                            alt="{{imgs.product_fk.name}}'s image">
+                                        {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td style="width: 400px;">
+                                        <h2>{{ord.product_fk.name}}</h2>
+                                    </td>
+                                    <td style="width: 400px;">
+                                        <h3>Quantity - {{ord.num}}</h3>
+                                    </td>
+                                    <td style="width: 400px;">
+                                        <h3>Price ₹ {{ord.price}}</h3>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h3>Expected Delivery time :</h3>
+                                    </td>
+                                    <td>
+                                        <h3>Ordererd on :</h3>
+                                    </td>
+                                    <td>
+                                        <h3>Delivery Status :</h3>
+                                    </td>
+                                    <td>
+                                        <h3>
+                                            Order Id :
+                                        </h3>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h3 style="border-style: solid; text-align: center; border-radius: 15px;">
+                                            {{ord.exp_ship_time}}</h3>
+                                    </td>
+                                    <td>
+                                        <h3 style="border-style: solid; text-align: center; border-radius: 15px;">
+                                            {{ord.ord_time}}</h3>
+                                    </td>
+                                    <td>
+                                        <h3 style="border-style: solid; text-align: center; border-radius: 15px;">
+                                            {% for shp in shp_sts %}
+                                            {% if shp.order_id.id == ord.id %}
+                                            {% if shp.shipping_status == shp.yes %}
+                                            <a style="color: green;">Delivered</a>
+                                            {% else %}
+                                            <a style="color: red;">Pending</a>
+                                            {% endif %}
+                                            {% endif %}
+                                            {% endfor %}
+                                        </h3>
+                                    </td>
+                                    <td>
+                                        <h3 style="border-style: solid; text-align: center; border-radius: 15px;">
+                                            {{ord.id}}
+                                        </h3>
+                                    </td>
+                                </tr>
+                            </table>
+                        </a>
+                        {% endfor %}
+                    </table>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div id="addrTable" name="userpgTable" style="display: none;">
+                    <div>
+                        <h1 class="userpgH1">Your Addresses</h1>
+                        <table align="center" style="border-style: hidden;" hover="border-style: solid;">
+                            <tr>
+                                <td>
+                                    {% for addr in addr %}
+                                    <table class="addressTable">
+                                        <tr id="all">
+                                            <td>
+                                                <textarea>{{forloop.counter}}. {{addr.address}}</textarea>
+                                            </td>
+                                            <td style="border-style: none; width: auto;">
+                                                <form action="deladdr" method="GET"><button name="addid" type="submit"
+                                                        value={{addr.id}}>Delete</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    {% empty %}
+                                    <table class="addressTable">
+                                        <tr>
+                                            <td>
+                                                <textarea>You haven't saved any addresses. Add an address below.</textarea>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <h1 class="userpgH1">Add Address</h1>
+                        <table align="center" class="addAddressTable">
+                            <tr>
+                                <form action="addaddr" method="POST">
+                                    {% csrf_token %}
+                                    <td>
+                                        <textarea name="addrs">Add Address....</textarea>
+                                    </td>
+                                    <td>
+                                        <button name="uid" value={{user.id}} type="submit">Add</button>
+                                    </td>
+                                </form>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table>
+                    {% if messages %}
+                    <div class="msg" name="Close">
+                        {% for message in messages %}
+                        {{ message }}
+                        <button class="close" type="button" onclick="msgs()" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </table>
+                <div id="chngUser" name="userpgTable" style="display: none;">
+                    <h1 align="center" class="userpgH1">Change the fields you would like to change or else enter the old
+                        details</h1>
+                    <form action="/chngDetail" method="POST">
+                        {% csrf_token %}
+                        <table align="center" class="userTable" style="display: block;">
+                            <tr>
+                                <input type="hidden" name="uid" value={{user.id}}>
+                            </tr>
+                            <tr style="width: 100%;">
+                                <td><label style="width: 50%;" for="name">Current Password</label>
+                                </td>
+                                <td><input type="password" name="password" placeholder="Enter your current password">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label for="name">First Name</label></td>
+                                <td><input type="text" name="first" placeholder="Enter your first name"></td>
+                            </tr>
+                            <tr>
+                                <td><label for="name">Last Name</label></td>
+                                <td><input type="text" name="last" placeholder="Enter your last name"></td>
+                            </tr>
+                            <tr>
+                                <td><label for="name">Email</label></td>
+                                <td><input type="email" name="email" placeholder="Enter your email"></td>
+                            </tr>
+                            <tr>
+                                <td><label for="name">New Password</label></td>
+                                <td><input type="password" name="chngpass" placeholder="Enter your new password"></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;"><button type="reset">Reset</button></td>
+                                <td style="text-align: center;"><button type="submit">Submit</button></td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+{% endblock %}

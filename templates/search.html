@@ -1,0 +1,34 @@
+{% extends 'main.html' %}
+<title>{% block title %}Search{% endblock %}</title>
+{% block content %}
+{% for data in prod %}
+<div class="crtitm">
+    <a href="/productpg?dat={{data.id}}" style="color: black;">
+    <table>
+        <tr style="text-align: center;">
+            {% for imgs in imgs %}
+            {% if imgs.product_fk.id == data.id and imgs.main_img == imgs.yes %}
+            <td style="width: 30%;"><img src={{media_url}}{{imgs.product_image}} style="width: 300px;" alt="{{data.name}}'s image">
+            </td>
+            {% endif %}
+            {% endfor %}
+            <td style="color: black; font-size: 20px; width: 20%;"><h2>{{data.name}}</h2></td>
+            <td style="width: 20%;">{% for stock in allstock %}
+                {% if stock.product_fk.id == data.id%}
+                {% if stock.act_quant > 0 %}
+                <h4 style="margin-left: 30%; border-style: solid; border-radius: 15px;">₹{{data.price}}</h4>
+                {% else %}
+                <h4 style="color: red;">Currently Not Available</h4>
+                {% endif %}
+                {% endif %}
+                {% endfor %}</td>
+            <!-- <td hidden><a style="font-size: 20px; color: black;">₹ </a><input type="number"
+                    style="cursor: pointer; font-size: 20px; text-align: center; border-style: solid; border-radius: 15px; width: 70px;"
+                    name="price" id="Price" value={{data.price}} readonly></td> -->
+            <td style="width: 30%;"><h5>{{data.desc}}</h5></td>
+        </tr>
+    </table>
+    </a>
+</div>
+{% endfor %}
+{% endblock %}

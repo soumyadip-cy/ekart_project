@@ -1,0 +1,195 @@
+{%extends 'main.html'%}
+{%block title%}
+{% for data in prod%}
+{{data.name}}
+{% endfor %}
+{%endblock%}
+{% block content %}
+<script>
+    function setImg(setnm) {
+        var smallImageSrc = document.getElementById(setnm).src;
+        var bigImageSrc = document.getElementById("bigImg").setAttribute("src", smallImageSrc)
+    }
+</script>
+{% for data in prod%}
+<div
+    style="margin-left: 20px; height: 700px; margin-top: 0%; align-content: center; text-align: center; overflow: hidden;">
+    <div style="height: 80%; width: 50%; text-align: left;float: left;">
+        {% for imgs in imgs%}
+        {% if imgs.product_fk.id == data.id %}
+        <input type="hidden" onload="setImg()" id="hdIn" value={{media_url}}{{imgs.product_image}}>
+        {% if imgs.main_img == imgs.yes %}
+        <div
+            style="background-color: white; border-style: solid; border-radius: 20px; border-color: cadetblue; padding: 5%; margin: 5%; margin-left: 0; text-align: center; height: 70%;">
+            <img class="prodBigImg" id="bigImg" src={{media_url}}{{imgs.product_image}}
+                style="max-width: 100%; max-height: 100%;">
+        </div>
+        <br>
+        <div>
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+            {% for imgs in imgs %}
+            {% if imgs.product_fk.id == data.id %}
+            <input class="prodSmlImg" type="image" id={{imgs.id}} onclick="setImg(id)"
+                style="background-color: white; border-style: solid; border-color: cadetblue; border-radius: 10px; padding: 3px; height: 50; width: auto;"
+                src={{media_url}}{{imgs.product_image}} height="50" width="70">
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div style="width: 50%; text-align: justify; float: right;">
+        <div>
+            <h1 style="font-size: 50px;">
+                {{data.name}}</h1>
+        </div>
+        <div style="bottom: 0px;">
+            <table>
+                {% for stock in allstock %}
+                {% if stock.product_fk.id == data.id%}
+                {% if stock.act_quant > 0 %}
+                <tr style="text-align: center;">
+                    <h3>Price - ₹{{data.price}}</h3>
+                </tr>
+                <tr>
+                    <td>
+                        <form action="items" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="pid" value={{data.id}}>
+                            {% if user.is_authenticated %}
+                            <input type="hidden" name="uid" value={{user.id}}>
+                            {% else %}
+                            <input type="hidden" name="uid" value="2">
+                            {% endif %}
+                            <input type="hidden" name="num" value="3">
+                            <input type="hidden" name="price" id="Price" value={{data.price}} readonly>
+                            <button class="prodBtn" type="submit" name="add">AddtoCart</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="buyd" method="POST">
+                            {% csrf_token %}
+                            {% if user.is_authenticated %}
+                            <input type="hidden" name="uid" value={{user.id}}>
+                            {% else %}
+                            <input type="hidden" name="uid" value="2">
+                            {% endif %}
+                            <button class="prodBtn" name="pid" style="margin-left: 5px;" type="submit"
+                                value="{{data.id}}">BUY</button>
+                        </form>
+                    </td>
+                    {% else %}
+                    <td>
+                        <h1
+                            style="color: red; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; font-size: 35px;">
+                            Currently Not Available</h1>
+                    </td>
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+            </table>
+        </div>
+        <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; font-size: 25px;">
+            {{data.desc}}</p>
+    </div>
+</div>
+</div>
+<div style="margin: auto; text-align: justify;">
+    <h3 class="headin3" style="font-size: 35px;">Reviews</h3>
+    {% for data in prod %}
+    <table>
+        <tr>
+            <td>
+                {% if user.is_authenticated %}
+                <h3 class="heading3" style="font-size: 30px;">{{user.first_name}}{% if user.username != user.email %}{{user.username}}{% endif %} write a review</h3>
+                <form action="newreview" method="POST">
+                    {% csrf_token %}
+                    <table>
+                        <tr>
+                            <td><textarea class="review" cols="100" rows="5"
+                                    name="revusr">{% for you in yrev%}{% if you.user_fk.id == user.id %}{% if you.review_text is not none %}{{you.review_text}}{% endif %}{% endif %}{% endfor %}</textarea>
+                            </td>
+                        </tr>
+                        <input type="hidden" name="prod_id" value={{data.id}}>
+                        <tr>
+                            <td><button class="revsubmit" type="submit" name="usrnm" value={{user.id}}>Submit</button>{% for you in yrev%}{% if you.user_fk.id == user.id %}&Tab;<button class="revdel"
+                                    formaction="delrev" type="submit" name="rid" value={{you.id}}>Delete
+                                    Review</button>{% endif %}{% endfor %}</td>
+                        </tr>
+                    </table>
+                </form>
+                {% if messages %}
+                <div class="msg">
+                    <span name="Close">
+                        {% for message in messages %}
+                        {{message}}
+                        {% endfor %}
+                        <button class="close" type="button" onclick="msgs()" aria-label="Close">
+                            <span aria-hidden="false">&times;</span>
+                        </button>
+                    </span>
+                </div>
+                {% endif %}
+                {% endif %}
+            </td>
+        </tr>
+        <!-- <tr>
+            <td>
+                <h3 class="headin3" style="font-size: 30px;">Others' Reviews</h3>
+            </td>
+        </tr> -->
+        {% for revs in yrev %}
+        <tr>
+            <td>
+                <h3 class="heading3">
+                    {{revs.user_fk.first_name}}{% if revs.user_fk.username != revs.user_fk.email %}{{revs.user_fk.username}}{% endif %}'s
+                    review</h3>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea class="review" style="border-color: black;" cols="100" rows="5"
+                    readonly>{{revs.review_text}}</textarea>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td>
+                <h3 class="heading3">No reviews available</h3>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endfor %}
+</div>
+{% for typs in alltype %}
+{% if typs.id == data.type_fk.id %}
+<div class="heading2" style="margin-left: 20px;">
+    <h1>Products you might like</h1>
+</div>
+<div style="text-align: center;">
+{% for data2 in allprod %}
+{% if data2.type_fk.id == typs.id|slice:"4"%}
+<a href="/productpg?dat={{data2.id}}">
+    <div class="cards" style="margin-left: 120px;">
+        <div class="homeimg">
+            {% for imgs in imgs %}
+            {% if imgs.product_fk.id == data2.id and imgs.main_img == imgs.yes %}
+            <img class="homeimg" src={{media_url}}{{imgs.product_image}} alt="image">
+            {% endif %}
+            {% endfor %}
+        </div>
+        <div class="title">
+            <h4>{{data2.name}}</h4>
+            <h4>₹{{data2.price}}</h4>
+        </div>
+    </div>
+</a>
+{% endif %}
+{% endfor %}
+</div>
+{% endif %}
+{% endfor %}
+{% endfor %}
+{% endblock %}

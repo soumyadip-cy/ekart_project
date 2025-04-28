@@ -1,0 +1,94 @@
+{% extends 'main.html' %}
+{% block title %}Ekart-Finish Shopping{% endblock %}
+{% block content %}
+<script>
+    function pay(num) {
+        for (let loop = 0; loop < 3; loop++) {
+            var cls = document.getElementsByName("paytype")[loop];
+            if (loop !== num)
+                cls.style.display = "none";
+        }
+        var opr = document.getElementsByName("paytype")[num];
+        opr.style.display = "block";
+    }
+    function cls(divN) {
+        var cls = document.getElementsByName("paytype")[divN]
+        cls.style.display = "none";
+    }
+</script>
+<div style="text-align: center; margin-top: 40px;">
+    <button class="paybtns" onclick="pay(0)">Net Banking</button>
+    <button class="paybtns" onclick="pay(1)">Card</button>
+    <button class="paybtns" onclick="pay(2)">COD</button>
+    <h3>TOTAL Amount to be paid = ₹{{tot}}</h3>
+    <form action="buy" method="POST">
+    {% csrf_token %}
+    <div>
+        {% if adr %}
+        <h3>Select address</h3>
+        <select class="addr" name="adrss" id="">
+            {% for adr in adr %}
+            <option value={{adr.id}}>{{adr.address}}</option>
+            {% endfor %}
+        </select>
+        {% else %}
+        <a class="noadr" href="/userpg?uid={{user.id}}">No addresses available. Add one ?</a>
+        {% endif %}
+    </div>
+    <div id="ntbnk" class="netbank" name="paytype" style="display: none;">
+        <h1 align="center" >Net Banking</h1>
+            <select name="" id="">
+                <option value="">United Bank</option>
+                <option value="">State Bank</option>
+            </select>
+            {% if adr is not null %}
+            <td><button class="pay" name="buybtn" value={{user.id}} type="submit">BUY</button></td>
+            {% else %}
+            <td>
+            <h3>Please add an address first</h3>
+            </td>
+            {% endif %}
+    </div>
+    <div id="card" name="paytype" style="text-align: left; display: block;">
+        <h1 align="center" >Pay by Card</h1>
+        <table align="center" class="frmdt">
+            <tr>
+                <td>Name</td>
+                <td><input type="text" width="100px" name="" placeholder="Card holder's name" id="crdHolder"></td>
+            </tr>
+            <tr>
+                <td>Card Number</td>
+                <td><input type="text" name="" placeholder="Card number" id="crdNum"></td>
+            </tr>
+            <tr>
+                <td>Expiry Date</td>
+                <td><input style="width: 148px;" type="month" name="" placeholder="Expiry date" id="crdExp"></td>
+            </tr>
+            <tr>
+                <td>CVV</td>
+                <td><input class="paytxt" type="number" name="" placeholder="CVV" id="crdCvv"></td>
+            </tr>
+            <tr style="text-align: right;">
+                {% if adr is not null %}
+                <td><button class="pay" name="buybtn" value={{user.id}} type="submit">BUY</button></td>
+                {% else %}
+                <td>
+                <h3>Please add an address first</h3>
+                </td>
+                {% endif %}
+            </tr>
+        </table>
+    </div>
+    <div id="cod" class="" name="paytype" style="display: none;">
+        <h1>Pay by Cash/Card on Delivery</h1>
+        {% if adr is not null %}
+        <td><button class="pay" name="buybtn" value={{user.id}} type="submit">ORDER</button></td>
+        {% else %}
+        <td>
+        <h3>Please add an address first</h3>
+        </td>
+        {% endif %}
+    </div>
+</form>
+</div>
+{% endblock %}

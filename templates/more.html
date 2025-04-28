@@ -1,0 +1,105 @@
+{% extends 'main.html' %}
+{% block title %}
+{{ title }}
+{% endblock %}
+{% block content %}
+<div class="heading1" style="cursor: default;">
+    <h1>{{ var.cat_name }}</h1>
+    <h1>{{var.type_name}}</h1>
+</div>
+{% if var.cat_name is not null %}
+<div id={{var.cat_fk.cat_name}}>
+        <h4 class="title" style="margin-left: 1%;" >
+            <a style="color: black;" onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" href="/">&LeftArrow; Home</a>
+        </h4>
+</div>
+<div align="center" id={{var.cat_name}}>
+    {% for data in prod %}
+    {% if forloop.counter|divisibleby:"5" %}
+    <br>
+    <a href="/typepg?var={{data.id}}">
+        <div class="cards">
+            <div class="homeimg">
+                <img class="homeimg" src="{{media_url}}{{data.type_pic}}" alt="{{data.type_name}}'s image'">
+            </div>
+            <div class="title">
+                <h4>{{data.type_name}}</h4>
+            </div>
+        </div>
+    </a>
+    {% else %}
+    <a href="/typepg?var={{data.id}}">
+        <div class="cards">
+            <div class="homeimg">
+                <img class="homeimg" src="{{media_url}}{{data.type_pic}}" alt="{{data.type_name}}'s image'">
+            </div>
+            <div class="title">
+                <h4>{{data.type_name}}</h4>
+            </div>
+        </div>
+    </a>
+    {% endif %}
+    {% endfor %}
+</div>
+{% else %}
+<div id={{var.cat_fk.cat_name}}>
+        <h4 class="title" style="margin-left: 1%;">
+            <a style="color: black;" onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'" href="/catpg?var={{var.cat_fk.id}}">&LeftArrow; {{var.cat_fk.cat_name}}</a>
+        </h4>
+</div>
+<div align="center" id={{var.type_name}}>
+    {% for data in prod %}
+    {% if forloop.counter|divisibleby:"5" %}
+    <br>
+    <a href="/productpg?dat={{data.id}}">
+        <div class="cards">
+            <div class="homeimg">
+                {% for imgs in imgs %}
+                {% if imgs.product_fk.id == data.id and imgs.main_img == imgs.yes %}
+                <img class="homeimg" src={{media_url}}{{imgs.product_image}} alt="{{data.name}}'s image">
+                {% endif %}
+                {% endfor %}
+            </div>
+            <div class="title">
+                <h4>{{data.name}}</h4>
+                {% for stock in allstock %}
+                {% if stock.product_fk.id == data.id %}
+                {% if stock.act_quant > 0 %}
+                <h4>₹{{data.price}}</h4>
+                {% else %}
+                <h4 style="color: red;">Currently Not Available</h4>
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </a>
+    {% else %}
+    <a href="/productpg?dat={{data.id}}">
+        <div class="cards">
+            <div class="homeimg">
+                {% for imgs in imgs %}
+                {% if imgs.product_fk.id == data.id and imgs.main_img == imgs.yes %}
+                <img class="homeimg" src={{media_url}}{{imgs.product_image}} alt="{{data.name}}'s image">
+                {% endif %}
+                {% endfor %}
+            </div>
+            <div class="title">
+                <h4>{{data.name}}</h4>
+                {% for stock in allstock %}
+                {% if stock.product_fk.id == data.id %}
+                {% if stock.act_quant > 0 %}
+                <h4>₹{{data.price}}</h4>
+                {% else %}
+                <h4 style="color: red;">Currently Not Available</h4>
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </a>
+    {% endif %}
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}
