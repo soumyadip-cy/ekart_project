@@ -12,3 +12,9 @@ Social App is a **fullstack project** made using **Django**.
 2. Additional functionalities include authentication, a shopping cart, and admin features for listing items, adding descriptions, and updating prices, by modifying the '\textit{admin.py}' file.
 
 3. The various database objects were created in the '\textit{models.py}', and request mapping was done in '\textit{views.py}'.
+
+---
+
+### Notes
+
+- To actually use this app, a superuser needs to be created, and the database needs to be populated using the admin panel. Categories need to be created, Stocks need to be updated, Products need to be uploaded.

@@ -30,7 +30,8 @@
 <div class="main-home-div" style="background-color: whitesmoke;">
     <div class="carousel" style="background-color: rgba(0, 0, 0, 0);" data-flickity='{ "autoPlay": true }'>
         {% for high in highlights %}
-        <div align="center" class="carousel-cell" style="margin-left: 5%; margin-right: 5%;" id="{{high.product_fk.name}}" style="overflow: hidden;">
+        <div align="center" class="carousel-cell" style="margin-left: 5%; margin-right: 5%;"
+            id="{{high.product_fk.name}}" style="overflow: hidden;">
             <a href="/productpg?dat={{high.product_fk.id}}" style="color: black;">
                 <table style="overflow: hidden;">
                     <tr style="text-align: center; margin: auto; float: left; padding: 10px; width: 90%;">

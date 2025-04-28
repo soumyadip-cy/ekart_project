@@ -2,7 +2,7 @@
 <title>{%block title%}Ekart-Login{%endblock%}</title>
 {%block content%}
 <div>
-    <form action="/loguser" method="POST">
+    <form action="/loguser" method="POST" style="margin-left: auto; margin-right: auto;">
         {% csrf_token %}
         <!-- {% if messages %}
         <div class="msg" name="Close">
@@ -14,7 +14,7 @@
             {% endfor %}
         </div>
         {% endif %} -->
-        <table align="center" class="logTable">
+        <table class="logTable">
             <tr>
                 <td><label for="name">Email</label></td>
                 <td><input type="text" name="email" placeholder="Enter your email"></td>
@@ -26,14 +26,14 @@
             {% if messages %}
             <tr name="Close">
                 <td>
-                {% for message in messages %}
-                {{message}} 
-                {% endfor %}
+                    {% for message in messages %}
+                    {{message}}
+                    {% endfor %}
                 </td>
                 <td>
-                <button class="close" type="button" onclick="msgs()" aria-label="Close">
-                    <span aria-hidden="false">&times;</span>
-                </button>
+                    <button class="close" type="button" onclick="msgs()" aria-label="Close">
+                        <span aria-hidden="false">&times;</span>
+                    </button>
                 </td>
             </tr>
             {% endif %}
